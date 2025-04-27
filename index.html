@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green Data Vault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://unpkg.com/smoothscroll-polyfill/dist/smoothscroll.min.js"></script>
+  <style>
+    /* General styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      color: #e0e0e0;
+      scroll-behavior: smooth;
+      background-image: url('https://pplx-res.cloudinary.com/image/private/user_uploads/QqFeHInWgYFLSXj/image.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-color: rgba(0, 0, 0, 0.5);
+      background-blend-mode: overlay;
+    }
+
+    /* Vanta.js background */
+    .vanta-bg {
+      height: 100vh;
+      width: 100vw;
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+    }
+
+    /* Navigation styles */
+    nav {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      background: rgba(30, 30, 30, 0.7);
+      padding: 1rem;
+      border-radius: 1rem 0 0 1rem;
+      box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    nav a {
+      color: #76ff03;
+      text-decoration: none;
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #00e676;
+      transform: translateX(-5px);
+    }
+
+    /* Header styles */
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 2px solid #00ff99;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    header:hover {
+      transform: scale(1.02);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #00ff99;
+      text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0
+        rgba(0, 0, 255, 0.75);
+      animation: glitch 0.5s infinite, fadeIn 1s ease-in-out;
+    }
+
+    /* Keyframes for glitch animation */
+    @keyframes glitch {
+      0% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0
+          rgba(0, 0, 255, 0.75);
+      }
+
+      14% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0
+          rgba(0, 0, 255, 0.75);
+      }
+
+      15% {
+        text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.05em 0 rgba(0, 255, 0, 0.75), -0.05em
+          -0.025em 0 rgba(0, 0, 255, 0.75);
+      }
+
+      49% {
+        text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.05em 0 rgba(0, 255, 0, 0.75), -0.05em
+          -0.025em 0 rgba(0, 0, 255, 0.75);
+      }
+
+      50% {
+        text-shadow: 0.05em 0.025em 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em
+          0.05em 0 rgba(0, 0, 255, 0.75);
+      }
+
+      99% {
+        text-shadow: 0.05em 0.025em 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em
+          0.05em 0 rgba(0, 0, 255, 0.75);
+      }
+
+      100% {
+        text-shadow: none;
+      }
+    }
+
+    /* Keyframes for fade-in animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    header p {
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      color: #76ff03;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* CTA button styles */
+    .cta {
+      display: flex;
+      gap: 1rem;
+      transition: transform 0.4s ease;
+    }
+
+    .cta:hover {
+      transform: scale(1.05);
+    }
+
+    .cta button,
+    .cta a {
+      padding: 0.75rem 1.5rem;
+      background: #00ff99;
+      color: #0d1117;
+      border: none;
+      border-radius: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .cta button:hover,
+    .cta a:hover {
+      background: #00cc7a;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 6px rgba(0, 204, 122, 0.3);
+    }
+
+    /* Section styles */
+    section {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* How it works section */
+    #how {
+      background-color: rgba(10, 10, 10, 0.7);
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    #how h2 {
+      color: #76ff03;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      transition: color 0.3s ease;
+    }
+
+    #how h2:hover {
+      color: #00e676;
+    }
+
+    /* Steps styles */
+    .steps {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      transition: transform 0.5s ease;
+    }
+
+    .steps:hover {
+      transform: scale(1.03);
+    }
+
+    .step {
+      flex: 1 1 200px;
+      text-align: center;
+      margin: 1rem;
+      background: rgba(30, 30, 30, 0.7);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 255, 0, 0.5);
+    }
+
+    .step h3 {
+      color: #00ff99;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      transition: color 0.3s ease;
+    }
+
+    .step h3:hover {
+      color: #76ff03;
+    }
+
+    .step p {
+      color: #ddd;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .step img {
+      width: 50px;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .step img:hover {
+      transform: scale(1.2);
+    }
+
+    /* Upload and Scan section */
+    #upload-scan {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('https://pplx-res.cloudinary.com/image/private/user_uploads/cHTSlQreSlznJJr/image.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
+      transition: transform 0.4s ease;
+    }
+
+    #upload-scan:hover {
+      transform: scale(1.03);
+    }
+
+    #upload-and-scan h2 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    #upload-and-scan p {
+      color: #ccc;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Upload button styles */
+    .upload-and-scan-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .upload-and-scan-buttons button {
+      padding: 0.75rem 1.5rem;
+      background: #00ff99;
+      color: #0d1117;
+      border: none;
+      border-radius: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .upload-and-scan-buttons button:hover {
+      background: #00cc7a;
+      transform: scale(1.1);
+      box-shadow: 0 5px 10px rgba(0, 204, 122, 0.4);
+    }
+
+    /* Scan progress bar styles */
+    #scan-progress {
+      width: 80%;
+      margin: 20px auto;
+      background-color: #222;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 255, 0, 0.2);
+    }
+
+    #scan-progress-bar {
+      height: 20px;
+      background-color: #4ade80;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Scan results styles */
+    #scan-results {
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    #scan-results h3 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    #scan-results ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #scan-results li {
+      padding: 10px;
+      border-bottom: 1px solid #333;
+    }
+
+    /* Results page styles */
+    #results-page {
+      display: none;
+    }
+
+    .results-container {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+
+    /* Impact dashboard styles */
+    .impact-dashboard {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    /* Stat card styles */
+    .stat-card {
+      background: #161b22;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      flex: 1 1 200px;
+      margin: 1rem;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 255, 0, 0.4);
+    }
+
+    .stat-card h3 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .stat-label {
+      color: #ccc;
+    }
+
+    /* Action section styles */
+    .action-section {
+      margin-top: 3rem;
+    }
+
+    .action-section h3 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+    }
+
+    /* Compression cards styles */
+    .compression-cards {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    /* Option card styles */
+    .option-card {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      flex: 1 1 200px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .option-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 255, 0, 0.3);
+    }
+
+    .option-card h4 {
+      color: #4ade80;
+      margin-bottom: 1rem;
+    }
+
+    /* Recommendation list styles */
+    .recommendation-list {
+      margin-top: 2rem;
+    }
+
+    /* Recommendation styles */
+    .recommendation {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .recommendation:hover {
+      background-color: #2a2a2a;
+    }
+
+    .recommendation h5 {
+      color: #4ade80;
+      margin-bottom: 0.5rem;
+    }
+
+    .recommendation span {
+      color: #ccc;
+    }
+
+    /* Welcome box styles */
+    #welcome-box {
+      display: none;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 5px;
+      z-index: 1000;
+      font-size: 1.2em;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #333;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.4s ease;
+    }
+
+    .modal-content:hover {
+      transform: scale(1.05);
+    }
+
+    /* Close button styles */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #fff;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #4ade80;
+    }
+
+    /* Input styles */
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #222;
+      color: #fff;
+    }
+
+    /* Button styles */
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #16a34a;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #15803d;
+    }
+
+    /* Toggle link styles */
+    .toggle-link {
+      color: #4ade80;
+      text-align: center;
+      display: block;
+      margin-top: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .toggle-link:hover {
+      color: #76ff03;
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+      nav {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="vanta" class="vanta-bg"></div>
+
+  <nav>
+    <a href="#how">How It Works</a>
+    <a href="#upload-scan">Upload and Scan</a>
+    <a href="#" onclick="openModal('login')">Login</a>
+    <a href="#" onclick="openModal('signup')">Sign Up</a>
+  </nav>
+
+  <div id="welcome-box"></div>
+
+  <header>
+    <h1>Reduce Your Digital Carbon Footprint Effortlessly</h1>
+    <p>Automatically find and remove duplicate and unnecessary files to save storage, energy, and reduce CO₂ emissions.</p>
+    <div class="cta">
+      <button onclick="openModal('login')">Get Started</button>
+      <a href="#how">How It Works</a>
+    </div>
+  </header>
+
+  <section id="how">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Connect or Upload</h3>
+        <p>Link cloud accounts or upload files.</p>
+      </div>
+      <div class="step">
+        <h3>2. Scan & Deduplicate</h3>
+        <p>We detect and clean duplicates and large files.</p>
+      </div>
+      <div class="step">
+        <h3>3. Track Your Impact</h3>
+        <p>See how much energy and space you saved.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="upload-scan">
+    <div id="upload-and-scan">
+      <h2>Ready to Make an Impact?</h2>
+      <p>Start your free analysis - no registration required</p>
+      <button class="upload-btn" onclick="document.getElementById('file-upload').click()">
+        Choose Files
+      </button>
+      <input type="file" id="file-upload" hidden multiple onchange="handleFileUpload(this.files)">
+      <div id="scan-progress">
+        <div id="scan-progress-bar"></div>
+      </div>
+      <div id="scan-results">
+        <h3>Potential Environmental Savings</h3>
+        <div id="results-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('login')">&times;</span>
+      <h2>Login</h2>
+      <input type="text" placeholder="Username" id="loginUsername">
+      <input type="password" placeholder="Password" id="loginPassword">
+      <button onclick="login()">Login</button>
+      <a class="toggle-link" onclick="openModal('signup'); closeModal('login')">Don't have an account? Sign up</a>
+    </div>
+  </div>
+
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('signup')">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Username" id="signupUsername">
+      <input type="password" placeholder="Password" id="signupPassword">
+      <button onclick="signup()">Sign Up</button>
+      <a class="toggle-link" onclick="openModal('login'); closeModal('signup')">Already have an account? Login</a>
+    </div>
+  </div>
+
+  <script>
+    // Vanta.js initialization
+    document.addEventListener('DOMContentLoaded', (event) => {
+      smoothscroll.polyfill();
+      vanta.globe({
+        el: "#vanta",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color1: 0x00ff99,
+        color2: 0x76ff03,
+        size: 1.10,
+        backgroundColor: 0x0d1117
+      })
+    });
+
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId + 'Modal').style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId + 'Modal').style.display = 'none';
+    }
+
+    // Placeholder functions for login and signup
+    function login() {
+      alert('Login function called');
+    }
+
+    function signup() {
+      alert('Signup function called');
+    }
+
+    // File upload handling (placeholder)
+    function handleFileUpload(files) {
+      const welcomeBox = document.getElementById('welcome-box');
+      const progressBar = document.getElementById('scan-progress-bar');
+      const resultsList = document.getElementById('results-list');
+
+      welcomeBox.style.display = 'block';
+      welcomeBox.textContent = 'Scanning files...';
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        progressBar.style.width = `${progress}%`;
+        if (progress >= 100) {
+          clearInterval(interval);
+          welcomeBox.textContent = 'Scan complete! Displaying results...';
+          displayResults(files, resultsList);
+          setTimeout(() => welcomeBox.style.display = 'none', 3000);
+        }
+      }, 200);
+    }
+
+    function displayResults(files, resultsList) {
+      resultsList.innerHTML = '';
+      let totalSize = 0;
+      let totalDuplicates = 0;
+
+      for (let i = 0; i < files.length; i++) {
+        totalSize += files[i].size;
+        totalDuplicates += Math.floor(Math.random() * 5);
+        const listItem = document.createElement('li');
+        listItem.textContent = `File: ${files[i].name}, Size: ${(files[i].size / 1024).toFixed(2)} KB`;
+        resultsList.appendChild(listItem);
+      }
+
+      const totalSizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+      const totalSavedSpace = (totalSizeInMB * 0.1).toFixed(2);
+      const duplicateItem = document.createElement('li');
+      duplicateItem.textContent = `Total files: ${files.length}, Total size: ${totalSizeInMB} MB`;
+      resultsList.appendChild(duplicateItem);
+
+      const savedSpaceItem = document.createElement('li');
+      savedSpaceItem.textContent = `Potential saved space: ${totalSavedSpace} MB`;
+      resultsList.appendChild(savedSpaceItem);
+    }
+  </script>
+</body>
+
+</html>
